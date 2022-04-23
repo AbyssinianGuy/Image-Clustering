@@ -1,13 +1,17 @@
+"""
+K means clustering Implementation
+@author Michael Asfaw.
+"""
+
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.datasets import load_iris
-from sklearn.preprocessing import StandardScaler
 from sklearn.metrics.cluster import silhouette_score, v_measure_score
 from sklearn.decomposition import TruncatedSVD, PCA
 
 import time
 
-np.random.seed(0)
+np.random.seed(43)
 
 
 def calculate_distances(x1, x2):
@@ -172,36 +176,35 @@ x = pca.fit_transform(X_test)
 # x = svd.fit_transform(X_test)
 K = [2, 3, 4, 5, 6, 7, 8, 9, 10]
 score = []  # silhouette score
-# y_pred2 = None
-# for k in K:
-#     kmeans2 = KMeans(x, n_clusters=k, iteration_limit=100)
-#     y_pred2 = kmeans2.predict()
-#     score.append(silhouette_score(X_test, y_pred2))
-# # save predictions to file for K = 10
-# with open(Predictions, "w") as f:
-#     for label in y_pred2:
-#         f.write(str(int(label)) + "\n")
-# print("Cluster prediction Done")
-# print("Silhouette score: {:.4f} for K = 10".format(score[8]))
+y_pred2 = None
+for k in K:
+    kmeans2 = KMeans(x, n_clusters=k, iteration_limit=100)
+    y_pred2 = kmeans2.predict()
+    score.append(silhouette_score(X_test, y_pred2))
+# save predictions to file for K = 10
+with open(Predictions, "w") as f:
+    for label in y_pred2:
+        f.write(str(int(label)) + "\n")
+print("Cluster prediction Done")
+print("Silhouette score: {:.4f} for K = 10".format(score[8]))
 
-# plt.plot(K, score, label='silhouette', color='blue')
-# plt.xlabel('K')
-# plt.ylabel("score")
-# plt.title("MNIST dataset")
-# plt.legend(loc='best')
-# plt.savefig(figure)
-#
-# colors = ['red', 'green', 'blue', 'yellow', 'pink', 'cyan', 'brown', 'purple', 'grey']
-kmeans2 = KMeans(x, n_clusters=10, iteration_limit=100)
-y_pred2 = kmeans2.predict()
-print(len(kmeans2.clusters[0]))
-for i, index in enumerate(kmeans2.clusters):
-    plt.scatter(x[y_pred2 == i, 0], x[y_pred2 == i, 1], s=100, cmap='rainbow', label='Cluster {}'.format(i))
-plt.scatter(kmeans2.centroids[:, 0], kmeans2.centroids[:, 1], s=100, c='black', label='Centroids')
-
-plt.title('Clusters of Iris Dataset')
-plt.xlabel('cluster size')
-plt.ylabel('features')
+plt.plot(K, score, label='silhouette', color='blue')
+plt.xlabel('K')
+plt.ylabel("score")
+plt.title("MNIST dataset")
 plt.legend(loc='best')
-plt.show()
+plt.savefig(figure)
+#
+# --------------- cluster visualization -------------------------------
+# kmeans2 = KMeans(x, n_clusters=10, iteration_limit=100)
+# y_pred2 = kmeans2.predict()
+# print(len(kmeans2.clusters[0]))
+# for i, index in enumerate(kmeans2.clusters):
+#     plt.scatter(x[y_pred2 == i, 0], x[y_pred2 == i, 1], s=100, cmap='rainbow', label='Cluster {}'.format(i))
+# plt.scatter(kmeans2.centroids[:, 0], kmeans2.centroids[:, 1], s=100, c='black', label='Centroids')
+#
+# plt.title('Clusters of Iris Dataset')
+# plt.xlabel('cluster size')
+# plt.ylabel('features')
+# plt.legend(loc='best')
 # plt.savefig("mnist_clusters.png")
